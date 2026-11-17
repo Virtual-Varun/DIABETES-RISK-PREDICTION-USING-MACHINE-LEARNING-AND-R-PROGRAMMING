@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Diabetes Risk Prediction & Clinical Analytics System</title>
+  <link rel="stylesheet" href="/web/style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- =======================================================
+         SIDEBAR NAVIGATION
+    ======================================================== -->
+    <aside class="sidebar">
+      <div class="sidebar-brand">
+        <div class="brand-badge">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+          </svg>
+        </div>
+        <div class="brand-meta">
+          <h2>GlucoRisk AI</h2>
+          <span>Clinical Analytics & ML</span>
+        </div>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" data-tab="dashboard">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" data-tab="upload">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          <span>Dataset Upload</span>
+          <span class="nav-badge" id="sidebarUploadBadge">New</span>
+        </button>
+        <button class="nav-item" data-tab="analysis">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          <span>Data Analysis</span>
+        </button>
+        <button class="nav-item" data-tab="prediction">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.59 4.59A2 2 0 1 1 11 8H2m10.59 11.41A2 2 0 1 0 14 16H2m15.73-8.27A2.5 2.5 0 1 1 19.5 12H2"/></svg>
+          <span>Diabetes Prediction</span>
+        </button>
+        <button class="nav-item" data-tab="risk">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Risk Analysis</span>
+        </button>
+        <button class="nav-item" data-tab="performance">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m4.93 4.93 4.24 4.24"/><path d="m14.83 9.17 4.24-4.24"/><path d="m14.83 14.83 4.24 4.24"/><path d="m9.17 14.83-4.24 4.24"/></svg>
+          <span>Model Performance</span>
+        </button>
+        <button class="nav-item" data-tab="importance">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/></svg>
+          <span>Feature Importance</span>
+        </button>
+        <button class="nav-item" data-tab="reports">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span>Reports & Downloads</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="model-badge">
+          <div class="status-indicator"></div>
+          <div>
+            <strong>Random Forest v1.0</strong>
+            <small>500 Trees • Trained Model</small>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- =======================================================
+         MAIN WORKSPACE
+    ======================================================== -->
+    <main class="main-body">
+      <!-- TOPBAR -->
+      <header class="topbar">
+        <div class="page-title">
+          <h1 id="activeTabTitle">Clinical Dashboard</h1>
+          <p id="activeTabSubtitle">Real-time cohort insights and algorithmic risk predictions</p>
+        </div>
+        <div class="topbar-actions">
+          <button class="btn btn-secondary btn-sm" id="btnLoadSampleTop">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 2.13-9.36L1 10"/></svg>
+            <span>Load 1,000 Sample Patients</span>
+          </button>
+          <div class="status-pill">
+            <span class="status-dot-active"></span>
+            <span>R Engine Connected</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- GLOBAL DISCLAIMER BANNER -->
+      <div class="medical-disclaimer-banner">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        <span>
+          <strong>Clinical Decision Support Notice:</strong> All predictions and risk scores are statistical machine learning estimates derived from Random Forest tree consensus. This system does not deliver confirmed medical diagnoses.
+        </span>
+      </div>
+
+      <div class="content-container">
+
+        <!-- ===================================================
+             1. DASHBOARD MODULE
+        ==================================================== -->
+        <section class="tab-pane active" id="pane-dashboard">
+          <!-- Summary Metrics Cards -->
+          <div class="kpi-grid">
+            <div class="kpi-card">
+              <div class="kpi-icon blue">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Total Patient Records</span>
+                <strong class="kpi-value" id="kpiTotalRecords">0</strong>
+                <span class="kpi-trend neutral" id="kpiRecordSource">Awaiting dataset upload</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon red">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Predicted Diabetes Cases</span>
+                <strong class="kpi-value red-text" id="kpiDiabetesCases">0</strong>
+                <span class="kpi-trend negative" id="kpiPosRate">0% positive rate</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon green">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Predicted Non-Diabetes</span>
+                <strong class="kpi-value" id="kpiNonDiabetesCases">0</strong>
+                <span class="kpi-trend positive" id="kpiNegRate">0% normoglycemic</span>
+              </div>
+            </div>
+
+            <div class="kpi-card">
+              <div class="kpi-icon teal">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              </div>
+              <div class="kpi-content">
+                <span class="kpi-label">Predicted Positive %</span>
+                <strong class="kpi-value" id="kpiPosPercentage">0%</strong>
+                <span class="kpi-trend neutral" id="kpiPosBenchmark">Cohort prevalence</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Clinical Means Grid -->
+          <div class="clinical-metrics-row">
+            <div class="metric-chip">
+              <span class="chip-title">Average Age</span>
+              <strong id="chipAvgAge">-- yrs</strong>
+            </div>
+            <div class="metric-chip">
+              <span class="chip-title">Mean BMI</span>
+              <strong id="chipAvgBMI">-- kg/m²</strong>
+            </div>
+            <div class="metric-chip">
+              <span class="chip-title">Mean HbA1c</span>
+              <strong id="chipAvgHbA1c">-- %</strong>
+            </div>
+            <div class="metric-chip">
+              <span class="chip-title">Mean Blood Glucose</span>
+              <strong id="chipAvgGlucose">-- mg/dL</strong>
+            </div>
+            <div class="metric-chip">
+              <span class="chip-title">Avg Risk Probability</span>
+              <strong id="chipAvgRisk">-- %</strong>
+            </div>
+          </div>
+
+          <!-- Empty State Prompt if no dataset loaded -->
+          <div class="card empty-banner" id="dashEmptyNotice">
+            <div class="empty-icon-large">📊</div>
+            <h3>No Patient Dataset Loaded Yet</h3>
+            <p>Upload a patient CSV in the <strong>Dataset Upload</strong> tab, or instantly explore with 1,000 sample patient records from the verified study dataset.</p>
+            <div class="empty-actions">
+              <button class="btn btn-primary" id="btnDashLoadSample">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                Load Sample Dataset (1,000 Patients)
+              </button>
+              <button class="btn btn-secondary" id="btnDashGoUpload">
+                Upload Custom CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Dynamic Charts Container -->
+          <div class="dashboard-charts-grid" id="dashChartsContainer">
+            <!-- Diabetes Outcome Chart -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div>
+                  <h3>Diabetes Outcome Distribution</h3>
+                  <span>Predicted clinical classifications</span>
+                </div>
+              </div>
+              <div class="chart-wrapper">
+                <div class="distribution-bars" id="dashOutcomeBars"></div>
+              </div>
+            </div>
+
+            <!-- Gender Distribution Chart -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div>
+                  <h3>Gender Distribution</h3>
+                  <span>Patient cohort demographic representation</span>
+                </div>
+              </div>
+              <div class="chart-wrapper">
+                <div class="distribution-bars" id="dashGenderBars"></div>
+              </div>
+            </div>
+
+            <!-- Age Group Cohorts -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div>
+                  <h3>Age Group Stratification</h3>
+                  <span>Patient frequency across life stages</span>
+                </div>
+              </div>
+              <div class="chart-wrapper">
+                <div class="distribution-bars" id="dashAgeBars"></div>
+              </div>
+            </div>
+
+            <!-- BMI Categories -->
+            <div class="chart-card">
+              <div class="card-header">
+                <div>
+                  <h3>BMI Clinical Categories</h3>
+                  <span>Underweight, Normal, Overweight, Obese</span>
+                </div>
+              </div>
+              <div class="chart-wrapper">
+                <div class="distribution-bars" id="dashBMIBars"></div>
+              </div>
+            </div>
+
+            <!-- HbA1c & Blood Glucose Analysis -->
+            <div class="chart-card full-width">
+              <div class="card-header">
+                <div>
+                  <h3>HbA1c & Blood Glucose Profile</h3>
+                  <span>Biomarker levels correlated with diabetes risk threshold (HbA1c ≥ 6.5%, Glucose ≥ 140 mg/dL)</span>
+                </div>
+              </div>
+              <div class="chart-wrapper biomarker-wrapper" id="dashBiomarkerBreakdown"></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             2. DATASET UPLOAD & VALIDATION MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-upload">
+          <div class="upload-workflow-grid">
+            <!-- Upload Box -->
+            <div class="card upload-card">
+              <div class="card-header">
+                <div>
+                  <h3>Upload Patient Dataset</h3>
+                  <span>Select or drag & drop CSV file containing 8 patient clinical features</span>
+                </div>
+              </div>
+
+              <div class="drop-zone" id="csvDropZone">
+                <div class="drop-icon">
+                  <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                </div>
+                <h4>Drag & Drop CSV File Here</h4>
+                <p>or click to browse from your device</p>
+                <input type="file" id="csvFileInput" accept=".csv" style="display:none">
+                <button type="button" class="btn btn-secondary btn-sm" id="btnBrowseFile">Select CSV File</button>
+                <div class="upload-spec-hint">
+                  Required columns: <code>gender, age, hypertension, heart_disease, smoking_history, bmi, HbA1c_level, blood_glucose_level</code> (optional <code>diabetes</code>)
+                </div>
+              </div>
+
+              <div class="or-separator"><span>OR EXPLORE WITH VERIFIED CLINICAL STUDY DATA</span></div>
+
+              <div class="bundled-data-box">
+                <div>
+                  <strong>Default Dataset (data/diabetes.csv)</strong>
+                  <p>100,000 clinical records formatted with all 8 features and ground-truth outcomes.</p>
+                </div>
+                <button class="btn btn-primary btn-sm" id="btnLoadBundled">Load 1,000 Rows</button>
+              </div>
+            </div>
+
+            <!-- Validation Results Card -->
+            <div class="card validation-card">
+              <div class="card-header">
+                <div>
+                  <h3>Data Quality & Validation Audit</h3>
+                  <span>Automated integrity checks per clinical ML guidelines</span>
+                </div>
+                <span class="badge" id="validationStatusBadge">Pending</span>
+              </div>
+
+              <div class="validation-stats-grid">
+                <div class="vstat-item">
+                  <span class="vstat-label">Total Rows</span>
+                  <strong class="vstat-val" id="vstatRows">0</strong>
+                </div>
+                <div class="vstat-item">
+                  <span class="vstat-label">Total Columns</span>
+                  <strong class="vstat-val" id="vstatCols">0</strong>
+                </div>
+                <div class="vstat-item">
+                  <span class="vstat-label">Valid Records</span>
+                  <strong class="vstat-val green-text" id="vstatValid">0</strong>
+                </div>
+                <div class="vstat-item">
+                  <span class="vstat-label">Invalid Records</span>
+                  <strong class="vstat-val red-text" id="vstatInvalid">0</strong>
+                </div>
+                <div class="vstat-item">
+                  <span class="vstat-label">Missing Values</span>
+                  <strong class="vstat-val" id="vstatMissing">0</strong>
+                </div>
+                <div class="vstat-item">
+                  <span class="vstat-label">Duplicate Rows</span>
+                  <strong class="vstat-val" id="vstatDuplicates">0</strong>
+                </div>
+              </div>
+
+              <div class="validation-messages-container" id="validationMessages">
+                <div class="info-alert">Upload a CSV file to execute dataset validation.</div>
+              </div>
+
+              <div class="validation-action-footer">
+                <button class="btn btn-primary w-100" id="btnRunBatchPrediction" disabled>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                  Execute Random Forest Batch Prediction
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Dataset Preview Table -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <div>
+                <h3>Dataset Preview</h3>
+                <span id="previewRecordCount">Showing first records</span>
+              </div>
+              <div class="table-search-box">
+                <input type="text" id="previewSearchInput" placeholder="Filter rows...">
+              </div>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="datasetPreviewTable">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Hypertension</th>
+                    <th>Heart Disease</th>
+                    <th>Smoking History</th>
+                    <th>BMI</th>
+                    <th>HbA1c Level</th>
+                    <th>Blood Glucose</th>
+                    <th>Target (Diabetes)</th>
+                  </tr>
+                </thead>
+                <tbody id="datasetPreviewBody">
+                  <tr>
+                    <td colspan="10" class="text-center text-muted py-4">No dataset currently loaded</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             3. DATA ANALYSIS MODULE (EDA with ggplot2)
+        ==================================================== -->
+        <section class="tab-pane" id="pane-analysis">
+          <!-- Interactive Filter Toolbar -->
+          <div class="card filter-toolbar">
+            <div class="filter-header">
+              <div class="d-flex align-items-center gap-2">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                <strong>Interactive Cohort Filters</strong>
+              </div>
+              <div class="d-flex align-items-center gap-2">
+                <span class="text-muted text-sm" id="analysisFilterSummary">Showing all patients</span>
+                <button type="button" class="btn btn-secondary btn-sm" id="btnResetEDAFilters">Reset Filters</button>
+                <button type="button" class="btn btn-primary btn-sm" id="btnApplyEDAFilters">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/></svg>
+                  <span>Apply & Regenerate R Plots</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="filter-controls-grid">
+              <div class="filter-group">
+                <label>Gender</label>
+                <select id="filterGender" class="form-control">
+                  <option value="all">All Genders</option>
+                  <option value="Female">Female</option>
+                  <option value="Male">Male</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Age Bracket</label>
+                <select id="filterAge" class="form-control">
+                  <option value="all">All Ages</option>
+                  <option value="young">&lt; 30 years</option>
+                  <option value="middle">30 - 45 years</option>
+                  <option value="mature">45 - 60 years</option>
+                  <option value="senior">60+ years</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Smoking History</label>
+                <select id="filterSmoking" class="form-control">
+                  <option value="all">All Histories</option>
+                  <option value="never">Never</option>
+                  <option value="current">Current</option>
+                  <option value="former">Former</option>
+                  <option value="ever">Ever</option>
+                  <option value="not current">Not Current</option>
+                  <option value="No Info">No Info</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Hypertension</label>
+                <select id="filterHyp" class="form-control">
+                  <option value="all">All</option>
+                  <option value="1">Hypertension (Yes)</option>
+                  <option value="0">Normal (No)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Heart Disease</label>
+                <select id="filterHD" class="form-control">
+                  <option value="all">All</option>
+                  <option value="1">Heart Disease (Yes)</option>
+                  <option value="0">No Heart Disease (No)</option>
+                </select>
+              </div>
+
+              <div class="filter-group">
+                <label>Diabetes Outcome</label>
+                <select id="filterOutcome" class="form-control">
+                  <option value="all">All</option>
+                  <option value="Diabetes">Diabetes</option>
+                  <option value="No Diabetes">No Diabetes</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Filtered Cohort Live Statistics Strip -->
+            <div class="clinical-metrics-row mt-3 mb-1" id="edaCohortMetricsRow">
+              <div class="metric-chip">
+                <span class="chip-title">Filtered Cohort</span>
+                <strong id="edaChipCount">--</strong>
+              </div>
+              <div class="metric-chip">
+                <span class="chip-title">Diabetes Cases</span>
+                <strong id="edaChipDiabetes" style="color: #e11d48;">--</strong>
+              </div>
+              <div class="metric-chip">
+                <span class="chip-title">Cohort Positive Rate</span>
+                <strong id="edaChipRate">--%</strong>
+              </div>
+              <div class="metric-chip">
+                <span class="chip-title">Mean Age</span>
+                <strong id="edaChipAge">-- yrs</strong>
+              </div>
+              <div class="metric-chip">
+                <span class="chip-title">Mean Glucose</span>
+                <strong id="edaChipGlucose">-- mg/dL</strong>
+              </div>
+            </div>
+
+            <div id="edaLoadingBanner" class="eda-loading-banner" style="display:none;">
+              <span class="spinner-border"></span>
+              <span>Regenerating 8 clinical ggplot2 plots in R for the filtered cohort...</span>
+            </div>
+          </div>
+
+          <!-- 8 ggplot2 Visualizations Grid -->
+          <div class="eda-gallery-grid">
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>1. Gender-Wise Distribution</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/gender_distribution.png', 'Gender-Wise Diabetes Distribution')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgGender" src="/output/gender_distribution.png" alt="Gender Distribution" onerror="this.src='/output/outcome_distribution.png'">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>2. Age Distribution</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/age_distribution.png', 'Age Cohort Distribution')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgAge" src="/output/age_distribution.png" alt="Age Distribution">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>3. Hypertension Analysis</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/hypertension_analysis.png', 'Hypertension Analysis')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgHyp" src="/output/hypertension_analysis.png" alt="Hypertension Analysis">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>4. Heart Disease Analysis</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/heart_disease_analysis.png', 'Heart Disease Analysis')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgHD" src="/output/heart_disease_analysis.png" alt="Heart Disease Analysis">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>5. Smoking History Analysis</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/smoking_analysis.png', 'Smoking History Analysis')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgSmoking" src="/output/smoking_analysis.png" alt="Smoking Analysis">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>6. Body Mass Index (BMI) Analysis</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/bmi_distribution.png', 'BMI Analysis')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgBMI" src="/output/bmi_distribution.png" alt="BMI Distribution">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>7. Glycated Hemoglobin (HbA1c)</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/hba1c_distribution.png', 'HbA1c Level Analysis')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgHbA1c" src="/output/hba1c_distribution.png" alt="HbA1c Distribution">
+              </div>
+            </div>
+
+            <div class="eda-card">
+              <div class="eda-header">
+                <h4>8. Blood Glucose Level Analysis</h4>
+                <button class="btn-icon" title="View Fullscreen" onclick="openPlotModal('/output/glucose_distribution.png', 'Blood Glucose Distribution')">⤢</button>
+              </div>
+              <div class="eda-img-wrap">
+                <img id="edaImgGlucose" src="/output/glucose_distribution.png" alt="Glucose Distribution">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             4. DIABETES PREDICTION MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-prediction">
+          <div class="prediction-tabs-bar">
+            <button class="sub-tab active" data-subtab="single">Single Patient Assessment</button>
+            <button class="sub-tab" data-subtab="batch">Batch Dataset Predictions</button>
+          </div>
+
+          <!-- SUBTAB 1: Single Patient Assessment -->
+          <div class="sub-pane active" id="subpane-single">
+            <div class="single-predict-layout">
+              <!-- Form Panel -->
+              <div class="card">
+                <div class="card-header">
+                  <div>
+                    <h3>Patient Clinical Input</h3>
+                    <span>Enter 8 diagnostic features for instant Random Forest inference</span>
+                  </div>
+                </div>
+
+                <form id="singlePredictionForm">
+                  <div class="form-grid-2col">
+                    <div class="form-group">
+                      <label for="single_gender">Gender</label>
+                      <select id="single_gender" class="form-control" required>
+                        <option value="">Select Gender</option>
+                        <option value="Female">Female</option>
+                        <option value="Male">Male</option>
+                        <option value="Other">Other</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_age">Age (Years)</label>
+                      <input type="number" id="single_age" class="form-control" min="1" max="120" placeholder="e.g. 52" required>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_hypertension">Hypertension Diagnosis</label>
+                      <select id="single_hypertension" class="form-control" required>
+                        <option value="0">No (Normal Blood Pressure)</option>
+                        <option value="1">Yes (Diagnosed Hypertension)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_heart_disease">Heart Disease History</label>
+                      <select id="single_heart_disease" class="form-control" required>
+                        <option value="0">No History</option>
+                        <option value="1">Yes (Diagnosed Cardiovascular Disease)</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_smoking">Smoking History</label>
+                      <select id="single_smoking" class="form-control" required>
+                        <option value="never">Never Smoked</option>
+                        <option value="current">Current Smoker</option>
+                        <option value="former">Former Smoker</option>
+                        <option value="ever">Ever Smoked</option>
+                        <option value="not current">Not Current Smoker</option>
+                        <option value="No Info">No Information</option>
+                      </select>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_bmi">BMI (kg/m²)</label>
+                      <input type="number" id="single_bmi" class="form-control" step="0.1" min="10" max="80" placeholder="e.g. 28.4" required>
+                      <small class="field-hint">Normal: 18.5 - 24.9 | Overweight: 25 - 29.9 | Obese: ≥30</small>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_hba1c">HbA1c Level (%)</label>
+                      <input type="number" id="single_hba1c" class="form-control" step="0.1" min="3" max="20" placeholder="e.g. 6.2" required>
+                      <small class="field-hint">Normal: &lt;5.7% | Pre-diabetes: 5.7 - 6.4% | Diabetes: ≥6.5%</small>
+                    </div>
+
+                    <div class="form-group">
+                      <label for="single_glucose">Fasting Blood Glucose (mg/dL)</label>
+                      <input type="number" id="single_glucose" class="form-control" min="40" max="600" placeholder="e.g. 135" required>
+                      <small class="field-hint">Normal: &lt;100 | Impaired: 100 - 125 | Diabetes: ≥126 mg/dL</small>
+                    </div>
+                  </div>
+
+                  <div class="form-actions mt-3">
+                    <button type="submit" class="btn btn-primary" id="btnSinglePredict">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                      Evaluate Patient Risk
+                    </button>
+                    <button type="button" class="btn btn-secondary" id="btnPresetHighRisk">Load High-Risk Sample</button>
+                    <button type="button" class="btn btn-secondary" id="btnPresetNormal">Load Low-Risk Sample</button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Single Patient Result Card -->
+              <div class="card result-card" id="singleResultContainer">
+                <div class="card-header">
+                  <div>
+                    <h3>Assessment Outcome</h3>
+                    <span>Model classification & probability estimates</span>
+                  </div>
+                  <span class="badge" id="singleRiskBadge">Awaiting Input</span>
+                </div>
+
+                <div class="single-result-body">
+                  <div class="gauge-block">
+                    <div class="probability-circle" id="singleProbCircle">
+                      <span class="prob-num" id="singleProbNum">--%</span>
+                      <small>Model Risk Score</small>
+                    </div>
+                    <div class="prediction-callout">
+                      <span class="callout-label">Predicted Class</span>
+                      <h2 id="singlePredictedClass">--</h2>
+                    </div>
+                  </div>
+
+                  <div class="risk-bar-track mt-3">
+                    <div class="risk-bar-fill" id="singleRiskBarFill" style="width: 0%"></div>
+                  </div>
+                  <div class="risk-scale-labels">
+                    <span>Low Risk (&lt;40%)</span>
+                    <span>Moderate (40-70%)</span>
+                    <span>High Risk (≥70%)</span>
+                  </div>
+
+                  <div class="biomarker-flags-grid mt-4" id="singleBiomarkerFlags"></div>
+
+                  <div class="clinical-note mt-3">
+                    <p id="singleResultSummary">Complete the patient form and click <strong>Evaluate Patient Risk</strong> to generate prediction.</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- SUBTAB 2: Batch Dataset Predictions -->
+          <div class="sub-pane" id="subpane-batch">
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Batch Prediction Results</h3>
+                  <span id="batchCountBadge">0 records processed</span>
+                </div>
+                <div class="batch-table-controls">
+                  <input type="text" id="batchSearchInput" placeholder="Search by Patient ID or value..." class="form-control form-control-sm">
+                  <select id="batchFilterOutcome" class="form-control form-control-sm">
+                    <option value="all">All Outcomes</option>
+                    <option value="Diabetes">Diabetes Only</option>
+                    <option value="No Diabetes">No Diabetes Only</option>
+                  </select>
+                  <select id="batchFilterRisk" class="form-control form-control-sm">
+                    <option value="all">All Risk Tiers</option>
+                    <option value="High">High Risk Only</option>
+                    <option value="Moderate">Moderate Risk Only</option>
+                    <option value="Low">Low Risk Only</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="data-table" id="batchPredictionTable">
+                  <thead>
+                    <tr>
+                      <th>Patient ID</th>
+                      <th>Gender</th>
+                      <th>Age</th>
+                      <th>BMI</th>
+                      <th>HbA1c</th>
+                      <th>Glucose</th>
+                      <th>Hypertension</th>
+                      <th>Heart Disease</th>
+                      <th>Predicted Status</th>
+                      <th>Model Probability</th>
+                      <th>Risk Level</th>
+                    </tr>
+                  </thead>
+                  <tbody id="batchPredictionBody">
+                    <tr>
+                      <td colspan="11" class="text-center text-muted py-4">No batch predictions currently available. Upload a dataset or load sample records.</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <!-- Pagination Footer -->
+              <div class="table-pagination">
+                <div class="pagination-info" id="batchPaginationInfo">Showing 0 of 0</div>
+                <div class="pagination-buttons">
+                  <button class="btn btn-secondary btn-sm" id="btnBatchPrev">Previous</button>
+                  <span id="batchPageIndicator" class="page-number">Page 1</span>
+                  <button class="btn btn-secondary btn-sm" id="btnBatchNext">Next</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             5. RISK ANALYSIS MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-risk">
+          <!-- Threshold Configuration Controls -->
+          <div class="card threshold-card">
+            <div class="card-header">
+              <div>
+                <h3>Configurable Probability Thresholds</h3>
+                <span>Calibrate clinical risk tier boundaries based on screening protocol objectives</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnResetThresholds">Reset to Defaults (40% / 70%)</button>
+            </div>
+
+            <div class="threshold-sliders-grid">
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="rangeLowThreshold">Low Risk Upper Boundary</label>
+                  <strong id="labelLowThreshold">40%</strong>
+                </div>
+                <input type="range" id="rangeLowThreshold" min="10" max="50" step="5" value="40" class="range-slider">
+                <span class="slider-hint">Probabilities below this value are classified as <strong>Low Risk</strong></span>
+              </div>
+
+              <div class="slider-group">
+                <div class="slider-header">
+                  <label for="rangeHighThreshold">High Risk Lower Boundary</label>
+                  <strong id="labelHighThreshold">70%</strong>
+                </div>
+                <input type="range" id="rangeHighThreshold" min="50" max="90" step="5" value="70" class="range-slider">
+                <span class="slider-hint">Probabilities at or above this value are classified as <strong>High Risk</strong></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Risk Tier Breakdown Cards -->
+          <div class="risk-tiers-grid mt-4">
+            <div class="risk-tier-card low-tier">
+              <div class="tier-header">
+                <span class="tier-pill low">Low Risk</span>
+                <span class="tier-range">&lt; <span id="tierRangeLow">40</span>%</span>
+              </div>
+              <div class="tier-body">
+                <h2 id="tierCountLow">0</h2>
+                <span>Patients (<span id="tierPctLow">0%</span>)</span>
+                <p>Normal probability baseline; routine annual preventative health checks recommended.</p>
+              </div>
+            </div>
+
+            <div class="risk-tier-card moderate-tier">
+              <div class="tier-header">
+                <span class="tier-pill moderate">Moderate Risk</span>
+                <span class="tier-range"><span id="tierRangeMod1">40</span>% - <span id="tierRangeMod2">70</span>%</span>
+              </div>
+              <div class="tier-body">
+                <h2 id="tierCountMod">0</h2>
+                <span>Patients (<span id="tierPctMod">0%</span>)</span>
+                <p>Borderline metabolic indicators; lifestyle intervention and dietary consultation suggested.</p>
+              </div>
+            </div>
+
+            <div class="risk-tier-card high-tier">
+              <div class="tier-header">
+                <span class="tier-pill high">High Risk</span>
+                <span class="tier-range">≥ <span id="tierRangeHigh">70</span>%</span>
+              </div>
+              <div class="tier-body">
+                <h2 id="tierCountHigh">0</h2>
+                <span>Patients (<span id="tierPctHigh">0%</span>)</span>
+                <p>Elevated glycated hemoglobin or fasting glucose; expedited formal physician diagnostics recommended.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- High-Risk Patient Roster -->
+          <div class="card mt-4">
+            <div class="card-header">
+              <div>
+                <h3>High-Risk Priority Cohort</h3>
+                <span>Patients flagged with probability ≥ high threshold requiring prioritized clinical evaluation</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnExportHighRiskCSV">Export High-Risk CSV</button>
+            </div>
+            <div class="table-responsive">
+              <table class="data-table" id="highRiskTable">
+                <thead>
+                  <tr>
+                    <th>Patient ID</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>BMI</th>
+                    <th>HbA1c</th>
+                    <th>Glucose</th>
+                    <th>Risk Probability</th>
+                    <th>Flagged Factors</th>
+                  </tr>
+                </thead>
+                <tbody id="highRiskBody">
+                  <tr>
+                    <td colspan="8" class="text-center text-muted py-4">No high-risk patients identified in current dataset</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             6. MODEL PERFORMANCE MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-performance">
+          <!-- Genuine Metrics Overview Cards -->
+          <div class="metrics-kpi-grid">
+            <div class="metric-box">
+              <span class="m-label">Accuracy</span>
+              <strong class="m-val" id="valAccuracy">97.30%</strong>
+              <small class="m-sub">Overall classification fidelity</small>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">Precision</span>
+              <strong class="m-val" id="valPrecision">99.66%</strong>
+              <small class="m-sub">Positive predictive value</small>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">Recall (Sensitivity)</span>
+              <strong class="m-val" id="valRecall">68.41%</strong>
+              <small class="m-sub">True positive detection rate</small>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">Specificity</span>
+              <strong class="m-val" id="valSpecificity">99.98%</strong>
+              <small class="m-sub">True negative identification</small>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">F1-Score</span>
+              <strong class="m-val" id="valF1">81.13%</strong>
+              <small class="m-sub">Harmonic precision-recall mean</small>
+            </div>
+            <div class="metric-box">
+              <span class="m-label">ROC-AUC</span>
+              <strong class="m-val" id="valAUC">0.9610</strong>
+              <small class="m-sub">Discriminative capability</small>
+            </div>
+          </div>
+
+          <div class="perf-layout-grid mt-4">
+            <!-- Confusion Matrix Display -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>Confusion Matrix</h3>
+                  <span>Evaluated on 20,000 independent held-out test patient cases</span>
+                </div>
+              </div>
+
+              <div class="confusion-matrix-wrapper">
+                <div class="cm-table-grid">
+                  <div class="cm-cell empty"></div>
+                  <div class="cm-cell header-col">Actual Non-Diabetes</div>
+                  <div class="cm-cell header-col">Actual Diabetes</div>
+
+                  <div class="cm-cell header-row">Pred. Non-Diabetes</div>
+                  <div class="cm-cell val-tn">
+                    <strong id="cmTN">18,296</strong>
+                    <span>True Negatives (TN)</span>
+                  </div>
+                  <div class="cm-cell val-fn">
+                    <strong id="cmFN">537</strong>
+                    <span>False Negatives (FN)</span>
+                  </div>
+
+                  <div class="cm-cell header-row">Pred. Diabetes</div>
+                  <div class="cm-cell val-fp">
+                    <strong id="cmFP">4</strong>
+                    <span>False Positives (FP)</span>
+                  </div>
+                  <div class="cm-cell val-tp">
+                    <strong id="cmTP">1,163</strong>
+                    <span>True Positives (TP)</span>
+                  </div>
+                </div>
+
+                <div class="cm-interpretation-box mt-3">
+                  <p><strong>Clinical Interpretation:</strong> The model achieves near-perfect specificity (99.98%) with only 4 false positives across 18,300 healthy individuals, ensuring virtually zero false alarms. Its sensitivity identifies over 68.4% of diabetes cases with 99.66% precision.</p>
+                </div>
+              </div>
+
+              <!-- Action to evaluate on uploaded data if ground truth is present -->
+              <div class="p-3 border-top bg-light" id="evalUploadedBox">
+                <button class="btn btn-secondary btn-sm" id="btnEvalUploaded">
+                  <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                  Evaluate Against Uploaded Dataset (If Ground Truth Available)
+                </button>
+              </div>
+            </div>
+
+            <!-- Visual ROC & Matrix Plots -->
+            <div class="card">
+              <div class="card-header">
+                <div>
+                  <h3>ROC Curve Analysis</h3>
+                  <span>Receiver Operating Characteristic (AUC = 0.961)</span>
+                </div>
+              </div>
+              <div class="roc-plot-wrapper">
+                <img src="/output/roc_curve.png" alt="ROC Curve Plot" class="responsive-plot">
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             7. FEATURE IMPORTANCE MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-importance">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Random Forest Feature Importance Analysis</h3>
+                <span>Relative ranking of clinical features based on Mean Decrease in Accuracy</span>
+              </div>
+              <button class="btn btn-secondary btn-sm" id="btnDownloadImportanceCSV">Download Importance CSV</button>
+            </div>
+
+            <div class="importance-layout-grid">
+              <!-- Horizontal Bar Chart -->
+              <div class="importance-chart-col">
+                <div class="importance-bars-list" id="importanceBarsList"></div>
+              </div>
+
+              <!-- Importance Table & Clinical Roles -->
+              <div class="importance-table-col">
+                <div class="table-responsive">
+                  <table class="data-table">
+                    <thead>
+                      <tr>
+                        <th>Feature</th>
+                        <th>Mean Decrease Accuracy</th>
+                        <th>Mean Decrease Gini</th>
+                        <th>Clinical Role</th>
+                      </tr>
+                    </thead>
+                    <tbody id="importanceTableBody"></tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+            <!-- Methodology & Causation Clarification Box -->
+            <div class="methodology-note-box mt-4">
+              <h4>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                Model Reliance vs. Medical Causation Disclaimer
+              </h4>
+              <p>
+                <strong>Important Scientific Distinction:</strong> In ensemble Random Forest architectures, feature importance quantifies how heavily the decision trees rely upon a specific attribute when partitioning feature space and minimizing out-of-bag classification loss.
+              </p>
+              <p>
+                A high <em>Mean Decrease in Accuracy</em> (such as observed in <code>HbA1c_level</code> and <code>blood_glucose_level</code>) establishes that permuting these variables significantly degrades diagnostic prediction power within this dataset. This metric demonstrates <strong>statistical model reliance</strong>, and must not be conflated with <strong>direct biological causation</strong>.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ===================================================
+             8. REPORTS & DOWNLOADS MODULE
+        ==================================================== -->
+        <section class="tab-pane" id="pane-reports">
+          <div class="card">
+            <div class="card-header">
+              <div>
+                <h3>Clinical Reports & Data Export Center</h3>
+                <span>Generate printable PDF clinical summaries or export raw prediction data</span>
+              </div>
+            </div>
+
+            <div class="export-cards-grid">
+              <div class="export-tile">
+                <div class="tile-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                </div>
+                <h4>Download Predictions (CSV)</h4>
+                <p>Complete tabular dataset containing all patient records, input covariates, predicted status, and exact model probability scores.</p>
+                <button class="btn btn-primary" id="btnDownloadPredictionsCSV">Export Predictions CSV</button>
+              </div>
+
+              <div class="export-tile">
+                <div class="tile-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                </div>
+                <h4>Download Model Performance (CSV)</h4>
+                <p>Extract verified model metrics: accuracy, sensitivity/recall, specificity, precision, F1-score, and confusion matrix counts.</p>
+                <button class="btn btn-secondary" id="btnDownloadMetricsCSV">Export Metrics CSV</button>
+              </div>
+
+              <div class="export-tile">
+                <div class="tile-icon">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+                </div>
+                <h4>Generate Printable PDF Report</h4>
+                <p>Formatted clinical executive summary with patient statistics, cohort risk distributions, biomarker means, and legal disclaimers.</p>
+                <button class="btn btn-primary" id="btnPrintReport">Print / Save PDF Report</button>
+              </div>
+            </div>
+
+            <!-- Report Summary Snapshot Preview -->
+            <div class="report-preview-box mt-4">
+              <h4>Current Cohort Summary Snapshot</h4>
+              <div class="report-meta-grid">
+                <div><span>Total Records Processed:</span> <strong id="repTotalRecords">0</strong></div>
+                <div><span>Predicted Diabetes:</span> <strong id="repDiabetesCount">0</strong></div>
+                <div><span>Predicted Non-Diabetes:</span> <strong id="repNonDiabetesCount">0</strong></div>
+                <div><span>Positivity Ratio:</span> <strong id="repPosRate">0%</strong></div>
+                <div><span>Mean Cohort HbA1c:</span> <strong id="repAvgHbA1c">-- %</strong></div>
+                <div><span>Mean Cohort Glucose:</span> <strong id="repAvgGlucose">-- mg/dL</strong></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </main>
+  </div>
+
+  <!-- =========================================================
+       MODAL FOR FULLSCREEN PLOT VIEW
+  ========================================================== -->
+  <div class="modal-backdrop" id="plotModal">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3 id="modalPlotTitle">Visualization</h3>
+        <button class="btn-close" onclick="closePlotModal()">✕</button>
+      </div>
+      <div class="modal-body text-center">
+        <img id="modalPlotImg" src="" alt="Plot Full View" style="max-width: 100%; max-height: 80vh; border-radius: 6px;">
+      </div>
+    </div>
+  </div>
+
+  <script src="/web/script.js"></script>
+</body>
+</html>

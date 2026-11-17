@@ -1,0 +1,12 @@
+# R environment and history
+.Rhistory
+.RDataTmp
+.Rproj.user/
+*.Rproj.user
+
+# Operating System
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+.DS_Store
